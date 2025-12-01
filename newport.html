@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sanjana — Portfolio</title>
+
+  <style>
+    :root{
+      --bg: #ffffff;
+      --text: #0b0b0b;
+      --muted: #6b6b6b;
+      --card: #ffffff;
+      --glass: rgba(255,255,255,0.6);
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+    }
+    [data-theme="dark"]{
+      --bg: #070707;
+      --text: #f3f3f3;
+      --muted: #a8a8a8;
+      --card: #0f1720;
+      --glass: rgba(12,12,12,0.5);
+      --accent: #818cf8;
+      --accent-light: #a5b4fc;
+    }
+
+    *{box-sizing:border-box}
+    html,body{
+      height:100%;margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; 
+      background:var(--bg); 
+      color:var(--text); 
+      -webkit-font-smoothing:antialiased; 
+      -moz-osx-font-smoothing:grayscale; 
+      scroll-behavior:smooth;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* BACKGROUND DESIGNS */
+    .bg-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* Animated gradient orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .orb1 {
+      width: 500px;
+      height: 500px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      top: -10%;
+      right: -10%;
+      animation-delay: 0s;
+    }
+
+    .orb2 {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      bottom: -5%;
+      left: -5%;
+      animation-delay: 5s;
+    }
+
+    .orb3 {
+      width: 350px;
+      height: 350px;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: 10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(50px, -50px) scale(1.1); }
+      50% { transform: translate(-30px, 30px) scale(0.9); }
+      75% { transform: translate(40px, 20px) scale(1.05); }
+    }
+
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: particleFloat 15s ease-in-out infinite;
+    }
+
+    @keyframes particleFloat {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0.4; }
+      50% { transform: translateY(-100px) translateX(50px); opacity: 0.8; }
+    }
+
+    /* Grid pattern */
+    .grid-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.5;
+    }
+
+    [data-theme="dark"] .grid-bg {
+      background-image: 
+        linear-gradient(rgba(129, 140, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(129, 140, 248, 0.05) 1px, transparent 1px);
+    }
+
+    /* Mesh gradient overlay */
+    .mesh-gradient {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(245, 87, 108, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 20%, rgba(79, 172, 254, 0.1) 0%, transparent 50%);
+      animation: meshMove 30s ease-in-out infinite;
+    }
+
+    @keyframes meshMove {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
+
+    /* container */
+    .wrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:56px 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* navbar */
+    .navbar{
+      position:fixed; left:0; right:0; top:12px; display:flex; align-items:center; justify-content:space-between;
+      padding:10px 28px; max-width:1100px; margin:0 auto; z-index:999; border-radius:10px; backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08); background:var(--glass); transition:transform .28s ease, opacity .28s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    [data-theme="dark"] .navbar {
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .navbar.hidden{ transform: translateY(-18px); opacity:0; pointer-events:none; }
+    .brand{ 
+      font-weight:700; 
+      font-size:18px; 
+      color:var(--text);
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .navlinks{ display:flex; gap:18px; align-items:center; }
+    .navlinks a{ 
+      text-decoration:none; 
+      color:var(--muted); 
+      font-size:15px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .navlinks a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    .navlinks a:hover{ color:var(--text); }
+    .navlinks a:hover::after { width: 100%; }
+
+    .toggle{ 
+      border:0; 
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+      color: white;
+      font-size:14px; 
+      cursor:pointer; 
+      padding:8px 16px; 
+      border-radius:8px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    .toggle:hover{ 
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    /* sections + typography */
+    section{ padding:92px 0; }
+    h1{ 
+      font-size:64px; 
+      margin:8px 0 8px 0; 
+      font-weight:700; 
+      letter-spacing:-1px;
+      background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    h2{ 
+      font-size:28px; 
+      margin:6px 0 14px 0; 
+      font-weight:650;
+      position: relative;
+      display: inline-block;
+    }
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+      border-radius: 2px;
+    }
+    p.lead{ font-size:20px; color:var(--muted); margin:8px 0 14px 0; max-width:720px; }
+
+    .col-left{ text-align:left; max-width:720px; }
+
+    /* skills */
+    .skills{ margin-top:18px; display:grid; gap:10px; max-width:480px; }
+    .skill-row{ 
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center; 
+      padding:12px 16px;
+      background: var(--card);
+      border-radius: 8px;
+      border: 1px solid rgba(99, 102, 241, 0.1);
+      transition: all 0.3s ease;
+    }
+    .skill-row:hover {
+      transform: translateX(8px);
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+    }
+    .skill-name{ color:var(--muted); font-weight:600; }
+    .dots{ display:flex; gap:8px; }
+    .dot{ 
+      width:14px; 
+      height:14px; 
+      border-radius:50%; 
+      border:1.5px solid var(--muted); 
+      background:transparent; 
+      transition:all .3s ease;
+    }
+    .dot.filled{ 
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+
+    /* education card */
+    .card{ 
+      background:var(--card); 
+      padding:24px; 
+      border-radius:16px; 
+      box-shadow:0 8px 32px rgba(0,0,0,0.06); 
+      border:1px solid rgba(99, 102, 241, 0.1);
+      max-width:560px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow:0 12px 48px rgba(99, 102, 241, 0.15);
+    }
+    [data-theme="dark"] .card{ border:1px solid rgba(255,255,255,0.04); }
+
+    /* contact icons */
+    .contacts{ display:flex; gap:14px; align-items:center; margin-top:14px; }
+    .icon-btn{ 
+      display:inline-flex; 
+      align-items:center; 
+      justify-content:center; 
+      width:48px; 
+      height:48px; 
+      border-radius:12px; 
+      text-decoration:none; 
+      border:1px solid rgba(99, 102, 241, 0.2);
+      color:var(--text); 
+      background:var(--card);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .icon-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+      transform: translate(-50%, -50%);
+      transition: all 0.5s ease;
+      opacity: 0.1;
+    }
+    .icon-btn:hover::before {
+      width: 100px;
+      height: 100px;
+    }
+    .icon-btn svg{ width:20px; height:20px; vertical-align:middle; position: relative; z-index: 1; }
+    .icon-btn:hover{ 
+      transform:translateY(-4px); 
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
+    }
+
+    /* small screens */
+    @media (max-width:740px){
+      h1{ font-size:44px; }
+      .navlinks{ display:none; }
+      .wrap{ padding:28px 18px; }
+      .orb { filter: blur(60px); }
+      .orb1 { width: 300px; height: 300px; }
+      .orb2 { width: 250px; height: 250px; }
+      .orb3 { width: 200px; height: 200px; }
+    }
+
+    /* reveal animation */
+    .reveal{ 
+      opacity:1; 
+      transform:translateY(0); 
+      transition:opacity .8s ease, transform .8s ease;
+    }
+    .reveal.animate{ 
+      animation: revealAnim 0.8s ease forwards;
+    }
+    @keyframes revealAnim {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* typed line */
+    .typed{ 
+      font-weight:600; 
+      font-size:20px; 
+      color:var(--muted); 
+      min-height:26px; 
+      display:inline-block;
+    }
+    .cursor{ 
+      display:inline-block; 
+      width:2px; 
+      background: var(--accent);
+      margin-left:4px; 
+      height:22px; 
+      vertical-align:middle; 
+      animation:blink 1s steps(1) infinite;
+    }
+    @keyframes blink{ 50%{ opacity:0 } }
+
+    footer{ 
+      color:var(--muted); 
+      font-size:13px; 
+      padding:28px 0 80px 0;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background designs -->
+  <div class="bg-wrapper">
+    <div class="grid-bg"></div>
+    <div class="mesh-gradient"></div>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <!-- restore theme from localStorage -->
+  <script>
+    (function(){
+      const saved = localStorage.getItem('sanjana-theme');
+      if(saved) document.documentElement.setAttribute('data-theme', saved);
+      else {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      }
+    })();
+  </script>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="brand">Sanjana</div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="navlinks" id="navlinks">
+        <a href="#intro">Intro</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="toggle" id="themeToggle" aria-pressed="false">Toggle</button>
+    </div>
+  </nav>
+
+  <main class="wrap" role="main">
+    <!-- INTRO -->
+    <section id="intro" class="reveal">
+      <div class="col-left">
+        <h1>Hi, I'm Sanjana.</h1>
+        <div style="display:flex; align-items:center;">
+          <div class="typed" id="typedLine" aria-live="polite"></div>
+          <div class="cursor" id="cursorEl" aria-hidden="true"></div>
+        </div>
+
+        <p class="lead" style="margin-top:18px;">I like building things that help me learn and grow.</p>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="reveal">
+      <h2>About Me</h2>
+      <div class="col-left">
+        <p>I'm Sanjana, a B.Tech Computer Science student who started exploring tech because I realised I didn't really have any "skills" — so I decided to make some for myself.</p>
+
+        <p style="margin-top:12px;">I enjoy learning things from scratch, experimenting with code, and slowly building my own space in tech. I'm still a beginner, but I like understanding how things work, breaking them, fixing them again, and getting a little better each time.</p>
+
+        <p style="margin-top:12px;">Right now, I'm focusing on the basics of programming, web development, and problem-solving — learning quietly, consistently, and at my own pace.</p>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="reveal">
+      <h2>Skills</h2>
+      <p class="lead">I'm still learning, but here are the languages and tools I've been exploring so far.</p>
+
+      <div class="skills" role="list">
+        <div class="skill-row" role="listitem">
+          <div class="skill-name">C</div>
+          <div class="dots" aria-label="C level 3 out of 5">
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-name">Java</div>
+          <div class="dots" aria-label="Java level 2 out of 5">
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-name">HTML</div>
+          <div class="dots" aria-label="HTML level 4 out of 5">
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-name">CSS</div>
+          <div class="dots" aria-label="CSS level 3 out of 5">
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-name">JavaScript</div>
+          <div class="dots" aria-label="JavaScript level 3 out of 5">
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-name">Python</div>
+          <div class="dots" aria-label="Python level 3 out of 5">
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-name">Data Structures</div>
+          <div class="dots" aria-label="Data Structures level 2 out of 5">
+            <span class="dot filled"></span>
+            <span class="dot filled"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education" class="reveal">
+      <h2>Education</h2>
+      <div class="card">
+        <strong>B.Tech in Computer Science</strong>
+        <div style="margin-top:6px; color:var(--muted)">2024 – present · KTU</div>
+        <p style="margin-top:10px; color:var(--muted)">Learning the foundations of programming, data structures, and computer science.</p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="reveal">
+      <h2>Contact</h2>
+      <p class="lead" style="margin-top:6px; max-width:720px;">Feel free to reach out — I'm always open to connecting, learning, or collaborating.</p>
+
+      <div class="contacts" role="navigation" aria-label="social links">
+        <a class="icon-btn" href="https://www.linkedin.com/in/sanjanarrao/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-14h4v2a4 4 0 0 1 4-2z"/><rect x="2" y="9" width="4" height="11"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+
+        <a class="icon-btn" href="https://www.instagram.com/_.sanjanarao.__/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37a4 4 0 1 1-7.94 1.63 4 4 0 0 1 7.94-1.63z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+
+        <a class="icon-btn" href="mailto:sanjanarao.9a@gmail.com" aria-label="Email">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" /><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+
+        <a class="icon-btn" href="https://wa.me/918078340847" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-1.7 4.9L21 21l-4.6-1.4a8.5 8.5 0 1 1 4.6-8.1z"/><path d="M17.5 13.5c-.2-.1-1.2-.6-1.4-.7-.2-.1-.4-.1-.6 0-.6.3-1.5.7-2.3.7s-1.6-.7-2.2-1.6c-.6-.8-.8-1.9-.6-2.3.1-.2.1-.4 0-.6-.1-.2-.6-1.2-.7-1.4-.2-.3-.5-.4-.9-.3-.4.1-1.6.6-1.6 1.9s1.8 3.6 4.2 4.6c2.2.9 3.8 1 4.2 1.1.4 0 .9-.1 1.2-.6.3-.5.3-1 .2-1.1z"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <div>Made with quiet curiosity • © Sanjana</div>
+    </footer>
+  </main>
+
+  <script>
+    /* Create floating particles dynamically */
+    (function(){
+      const bgWrapper = document.querySelector('.bg-wrapper');
+      for(let i = 0; i < 20; i++){
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+        bgWrapper.appendChild(particle);
+      }
+    })();
+
+    /* NAVBAR show/hide on scroll & reveal on load */
+    (function(){
+      const nav = document.getElementById('navbar');
+      let last = window.scrollY;
+      function onScroll(){
+        const y = window.scrollY;
+        if(y > last && y > 120) nav.classList.add('hidden'); else nav.classList.remove('hidden');
+        last = y;
+        document.querySelectorAll('.reveal').forEach(el=>{
+          const r = el.getBoundingClientRect();
+          if(r.top < window.innerHeight - 80 && !el.classList.contains('animate')) {
+            el.classList.add('animate');
+          }
+        });
+      }
+      window.addEventListener('scroll', onScroll, {passive:true});
+      window.addEventListener('load', onScroll);
+      setTimeout(()=> nav.classList.remove('hidden'), 300);
+    })();
+
+    /* Theme toggle (persist) */
+    (function(){
+      const btn = document.getElementById('themeToggle');
+      function setTheme(t){
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('sanjana-theme', t);
+        btn.textContent = t === 'dark' ? 'Light' : 'Dark';
+        btn.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+      }
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      setTheme(current);
+      btn.addEventListener('click', ()=>{
+        const now = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        setTheme(now);
+      });
+    })();
+
+    /* Typing effect */
+    (function(){
+      const el = document.getElementById('typedLine');
+      const cursor = document.getElementById('cursorEl');
+      const text = "Aspiring developer | curious learner.";
+      let i = 0;
+      function type(){
+        if(i <= text.length){
+          el.textContent = text.slice(0,i);
+          i++;
+          setTimeout(type, 60);
+        } else { cursor.style.animation = 'blink .9s steps(1) infinite'; }
+      }
+      setTimeout(type, 350);
+    })();
+  </script>
+</body>
+</html>
